@@ -11,11 +11,11 @@ const Hero = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLHeadingElement>(null);
   const subTextRef = useRef<HTMLDivElement>(null);
-  const ctaRef = useRef<HTMLButtonElement>(null); // Novo: Botão de Ação
-  const bg1Ref = useRef<HTMLDivElement>(null); // Novo: Fundo 1
-  const bg2Ref = useRef<HTMLDivElement>(null); // Novo: Fundo 2
+  const ctaRef = useRef<HTMLButtonElement>(null);
+  const bg1Ref = useRef<HTMLDivElement>(null);
+  const bg2Ref = useRef<HTMLDivElement>(null);
 
-  // Função para rolar até a secção de Persona
+  // Rola a página suavemente até a seção de configuração da Persona
   const handleStart = () => {
     const element = document.getElementById("persona");
     if (element) {
@@ -24,7 +24,7 @@ const Hero = () => {
   };
 
   useGSAP(() => {
-    // 1. Timeline de Entrada (Ao carregar a página)
+    // Configuração da animação de entrada dos elementos
     const entryTl = gsap.timeline();
 
     entryTl
@@ -35,35 +35,32 @@ const Hero = () => {
       .fromTo(subTextRef.current,
         { opacity: 0, y: 30 },
         { opacity: 1, y: 0, duration: 1, ease: "power3.out" },
-        "-=0.8" // Começa um pouco antes do título terminar
+        "-=0.8"
       )
       .fromTo(ctaRef.current,
         { opacity: 0, scale: 0.8, y: 20 },
-        { opacity: 1, scale: 1, y: 0, duration: 0.8, ease: "back.out(1.7)" }, // Efeito "pop"
+        { opacity: 1, scale: 1, y: 0, duration: 0.8, ease: "back.out(1.7)" },
         "-=0.6"
       );
 
-    // 2. Timeline de Scroll (O Efeito de Saída "Parallax")
-    // Usamos scrub: 1 para garantir que a animação reverte ao subir o scroll
+    // Configuração do efeito de parallax ao rolar a página
     const scrollTl = gsap.timeline({
       scrollTrigger: {
         trigger: containerRef.current,
-        start: "top top",   // Começa no topo da página
-        end: "bottom 40%",  // Termina a animação quando o Hero já passou um pouco
-        scrub: 1,           // Suavidade na ida e na volta
+        start: "top top",
+        end: "bottom 40%",
+        scrub: 1,
       }
     });
 
-    // Os elementos saem com velocidades diferentes para dar profundidade
     scrollTl
-      .to(textRef.current, { y: -150, opacity: 0 }, 0)       // Título sobe rápido
-      .to(subTextRef.current, { y: -100, opacity: 0 }, 0.1)  // Subtítulo sobe mais devagar
-      .to(ctaRef.current, { y: -50, opacity: 0 }, 0.2);      // Botão sobe ainda mais devagar
+      .to(textRef.current, { y: -150, opacity: 0 }, 0)
+      .to(subTextRef.current, { y: -100, opacity: 0 }, 0.1)
+      .to(ctaRef.current, { y: -50, opacity: 0 }, 0.2);
 
-    // 3. Parallax dos Fundos (Blobs)
-    // Movem-se independentemente do texto para criar atmosfera
+    // Animação independente dos elementos de fundo
     gsap.to(bg1Ref.current, {
-      y: 300, // Desce enquanto scrolla
+      y: 300,
       ease: "none",
       scrollTrigger: {
         trigger: containerRef.current,
@@ -74,7 +71,7 @@ const Hero = () => {
     });
 
     gsap.to(bg2Ref.current, {
-      y: -200, // Sobe enquanto scrolla (movimento contrário)
+      y: -200,
       ease: "none",
       scrollTrigger: {
         trigger: containerRef.current,
@@ -93,7 +90,7 @@ const Hero = () => {
       className="relative h-screen w-full bg-black text-white flex flex-col items-center justify-center overflow-hidden"
     >
 
-      {/* Elementos de fundo (Blobs) com Refs para animação */}
+      {/* Elementos de fundo animados */}
       <div
         ref={bg1Ref}
         className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-600/20 rounded-full blur-[120px] pointer-events-none"
@@ -103,7 +100,7 @@ const Hero = () => {
         className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-600/20 rounded-full blur-[120px] pointer-events-none"
       />
 
-      {/* Conteúdo Central */}
+      {/* Conteúdo principal */}
       <div className="z-10 text-center max-w-5xl px-6 flex flex-col items-center">
 
         <h1
@@ -115,12 +112,12 @@ const Hero = () => {
 
         <div ref={subTextRef}>
           <p className="text-xl md:text-2xl text-gray-400 font-medium max-w-2xl mx-auto leading-relaxed mb-10">
-            Inteligência Artificial Generativa alinhada à identidade da tua marca.
+            Inteligência Artificial Generativa alinhada à identidade da sua marca.
             Do conceito à publicação no Instagram.
           </p>
         </div>
 
-        {/* Novo Botão CTA */}
+        {/* Botão de ação principal (CTA) */}
         <button
           ref={ctaRef}
           onClick={handleStart}
@@ -131,13 +128,12 @@ const Hero = () => {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
           </svg>
 
-          {/* Efeito de brilho no hover */}
           <div className="absolute inset-0 rounded-full ring-2 ring-white/20 group-hover:ring-white/40 transition-all" />
         </button>
 
       </div>
 
-      {/* Indicador de Scroll (Desvanece nativamente via CSS ou pode ser animado também) */}
+      {/* Indicador de rolagem */}
       <div className="absolute bottom-10 animate-bounce text-gray-600 opacity-50">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M7 13l5 5 5-5M7 6l5 5 5-5"/></svg>
       </div>

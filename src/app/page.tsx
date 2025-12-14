@@ -1,34 +1,30 @@
-import ContentTypeSelector from "@/components/ContentTypeSelector";
-import FileUploader from "@/components/FileUploader"; // Novo
-import GenerationResult from "@/components/GenerationResult"; // Novo
+import FileUploader from "@/components/FileUploader";
+import GenerationResult from "@/components/GenerationResult";
 import Hero from "@/components/Hero";
-import Navbar from "@/components/Navbar";
 import PersonaForm from "@/components/PersonaForm";
 
 export default function Home() {
   return (
     <main className="bg-black min-h-screen selection:bg-blue-500 selection:text-white">
-      <Navbar />
 
       <Hero />
 
-      {/* SECÇÃO 1: PERSONA & CONFIGURAÇÃO */}
+      {/* SEÇÃO 1: PERSONA & CONFIGURAÇÃO */}
       <section id="persona" className="min-h-screen bg-black border-t border-zinc-900 py-32 flex flex-col items-center justify-center relative">
         <div className="text-center mb-12 px-6 z-10">
           <h2 className="text-4xl md:text-5xl font-semibold text-white tracking-tight mb-4">
-            Defina a sua Identidade.
+            Defina sua Identidade.
           </h2>
           <p className="text-xl text-zinc-400 max-w-2xl mx-auto">
-            Ensine a IA sobre a sua marca para gerar conteúdo autêntico.
+            Ensine a IA sobre sua marca para gerar conteúdo autêntico.
           </p>
         </div>
         <div className="w-full z-10">
           <PersonaForm />
-          <ContentTypeSelector />
         </div>
       </section>
 
-      {/* SECÇÃO 2: BASE DE CONHECIMENTO (RAG) */}
+      {/* SEÇÃO 2: BASE DE CONHECIMENTO (RAG) */}
       <section id="knowledge" className="bg-zinc-950 py-32 px-6 border-t border-zinc-900">
         <div className="text-center text-white max-w-3xl mx-auto mb-12">
           <h2 className="text-4xl font-semibold mb-6">Base de Conhecimento.</h2>
@@ -39,16 +35,17 @@ export default function Home() {
         <FileUploader />
       </section>
 
-      {/* SECÇÃO 3: GERAÇÃO */}
-      <section id="generate" className="bg-black border-t border-zinc-900 py-32">
+      {/* SEÇÃO 3: GERAÇÃO */}
+      <section id="generate" className="bg-black border-t border-zinc-900 pt-32 pb-10 min-h-screen">
         <div className="text-center text-white mb-12">
           <h2 className="text-4xl font-semibold">Criação Final.</h2>
         </div>
         <GenerationResult />
       </section>
 
-      <footer className="bg-zinc-950 py-12 text-center text-zinc-600 text-sm border-t border-zinc-900">
-        <p>Desenvolvido para TCC - Sistemas de Informação UFPE</p>
+      {/* RODAPÉ */}
+      <footer className="bg-zinc-950 py-6 text-center text-zinc-600 text-sm border-t border-zinc-900">
+        <p>Desenvolvido com ❤️ por Giovanna</p>
       </footer>
     </main>
   );

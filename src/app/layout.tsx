@@ -1,5 +1,5 @@
 import Navbar from "@/components/Navbar";
-import { FormProvider } from "@/context/FormContext"; // <--- Importar aqui
+import { FormProvider } from "@/context/FormContext";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
@@ -17,9 +17,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt">
+    <html lang="pt-BR">
       <body className={inter.className}>
-        <FormProvider> {/* <--- Envolver tudo com o Provider */}
+        {/* Provedor de contexto global para gerenciar o estado do formulário em toda a aplicação */}
+        <FormProvider>
           <Navbar />
           {children}
         </FormProvider>

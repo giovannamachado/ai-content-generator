@@ -2,7 +2,7 @@
 
 import { createContext, ReactNode, useContext, useState } from "react";
 
-// 1. Definir o formato dos dados que vamos guardar
+// Definição da estrutura de dados do formulário
 interface FormData {
   persona: string;
   targetAudience: string;
@@ -13,7 +13,7 @@ interface FormData {
   finalPrompt: string;
 }
 
-// 2. Definir o formato das funções para atualizar esses dados
+// Definição da interface do contexto para manipulação de estado
 interface FormContextType {
   data: FormData;
   updateData: (key: keyof FormData, value: any) => void;
@@ -21,7 +21,7 @@ interface FormContextType {
   removeFile: (index: number) => void;
 }
 
-// Valores iniciais (vazios)
+// Estado inicial padrão
 const defaultData: FormData = {
   persona: "",
   targetAudience: "",
@@ -34,7 +34,7 @@ const defaultData: FormData = {
 
 const FormContext = createContext<FormContextType | undefined>(undefined);
 
-// 3. O Provedor (o componente que vai envolver o site)
+// Provedor de contexto que envolve a aplicação
 export const FormProvider = ({ children }: { children: ReactNode }) => {
   const [data, setData] = useState<FormData>(defaultData);
 
@@ -60,7 +60,7 @@ export const FormProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-// 4. Um hook personalizado para facilitar o uso nos componentes
+// Hook personalizado para acesso ao contexto do formulário
 export const useFormContext = () => {
   const context = useContext(FormContext);
   if (!context) {
