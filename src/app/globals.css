@@ -16,6 +16,47 @@
     --accent: #2997ff;
 }
 
+/* --- SCROLLBAR GLOBAL MODERNA (Estilo Gemini/MacOS) --- */
+/* Aplica-se a todo o site: página principal e containers internos */
+
+/* Chrome, Edge, Safari */
+::-webkit-scrollbar {
+    width: 8px;
+    /* Largura vertical */
+    height: 8px;
+    /* Altura horizontal */
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+    /* Fundo invisível */
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.15);
+    /* Cor subtil */
+    border-radius: 9999px;
+    /* Totalmente arredondado */
+    border: 2px solid transparent;
+    /* Cria um espaço (padding) visual ao redor da barra */
+    background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+    /* Mais visível ao passar o rato */
+}
+
+::-webkit-scrollbar-corner {
+    background: transparent;
+}
+
+/* Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+}
+
 /* Reset básico para garantir que o fundo é sempre preto */
 body {
     background-color: var(--background);

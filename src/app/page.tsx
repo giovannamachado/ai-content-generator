@@ -1,6 +1,5 @@
-import ContentTypeSelector from "@/components/ContentTypeSelector";
-import FileUploader from "@/components/FileUploader"; // Novo
-import GenerationResult from "@/components/GenerationResult"; // Novo
+import FileUploader from "@/components/FileUploader";
+import GenerationResult from "@/components/GenerationResult";
 import Hero from "@/components/Hero";
 import Navbar from "@/components/Navbar";
 import PersonaForm from "@/components/PersonaForm";
@@ -24,7 +23,6 @@ export default function Home() {
         </div>
         <div className="w-full z-10">
           <PersonaForm />
-          <ContentTypeSelector />
         </div>
       </section>
 
@@ -40,15 +38,17 @@ export default function Home() {
       </section>
 
       {/* SECÇÃO 3: GERAÇÃO */}
-      <section id="generate" className="bg-black border-t border-zinc-900 py-32">
+      {/* CORREÇÃO: Adicionei 'min-h-screen' para garantir altura mínima e empurrar o footer */}
+      <section id="generate" className="bg-black border-t border-zinc-900 pt-32 pb-10 min-h-screen">
         <div className="text-center text-white mb-12">
           <h2 className="text-4xl font-semibold">Criação Final.</h2>
         </div>
         <GenerationResult />
       </section>
 
-      <footer className="bg-zinc-950 py-12 text-center text-zinc-600 text-sm border-t border-zinc-900">
-        <p>Desenvolvido para TCC - Sistemas de Informação UFPE</p>
+      {/* FOOTER */}
+      <footer className="bg-zinc-950 py-6 text-center text-zinc-600 text-sm border-t border-zinc-900">
+        <p>Desenvolvido com ❤️ por Giovanna</p>
       </footer>
     </main>
   );
