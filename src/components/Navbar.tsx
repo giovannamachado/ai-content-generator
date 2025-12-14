@@ -1,108 +1,114 @@
 "use client";
 
-import { useGSAP } from "@gsap/react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
-// Registar o plugin ScrollTrigger
-gsap.registerPlugin(ScrollTrigger);
+// Definição dos itens de navegação
+const NAV_ITEMS = [
+  { id: "start", label: "Início" },
+  { id: "persona", label: "Persona" },
+  { id: "knowledge", label: "RAG" },
+  { id: "generate", label: "Detalhes" },
+];
 
 const Navbar = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(true);
+  const [activeSection, setActiveSection] = useState("start");
+  const [isMounted, setIsMounted] = useState(false);
+
+  const lastScrollY = useRef(0);
+  const isClickScrolling = useRef(false);
   const navRef = useRef<HTMLElement>(null);
 
-  const scrollToSection = (id: string) => {
+  // Garante renderização apenas no cliente para evitar erros de hidratação
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      // Lógica para ocultar/mostrar a barra baseada na direção do scroll
+      if (!isClickScrolling.current) {
+        if (currentScrollY > lastScrollY.current && currentScrollY > 100) {
+          setIsVisible(false);
+        } else {
+          setIsVisible(true);
+        }
+      }
+
+      lastScrollY.current = currentScrollY;
+
+      // Lógica para detectar a seção ativa na viewport
+      const sections = NAV_ITEMS.map((item) => document.getElementById(item.id));
+      let currentActive = activeSection;
+
+      for (const section of sections) {
+        if (section) {
+          const rect = section.getBoundingClientRect();
+          // Verifica se a seção está na área central de foco
+          if (rect.top <= 300 && rect.bottom >= 300) {
+            currentActive = section.id;
+          }
+        }
+      }
+
+      if (currentActive !== activeSection) {
+        setActiveSection(currentActive);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [activeSection]);
+
+  const handleClick = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
+      isClickScrolling.current = true;
+      setIsVisible(true);
+      setActiveSection(id);
       element.scrollIntoView({ behavior: "smooth" });
+
+      // Temporizador para liberar a detecção de scroll manual
+      setTimeout(() => {
+        isClickScrolling.current = false;
+      }, 1000);
     }
   };
 
-  useGSAP(() => {
-    // 1. Animação Inicial de Entrada
-    gsap.fromTo(navRef.current,
-      { y: -100, opacity: 0 },
-      { y: 0, opacity: 1, duration: 1, ease: "power3.out", delay: 0.5 }
-    );
+  const containerClasses = `fixed top-6 left-0 right-0 z-50 flex justify-center px-4 pointer-events-none transition-transform duration-500 ease-in-out ${isVisible ? "translate-y-0" : "-translate-y-[150%]"}`;
 
-    // 2. Lógica de Scroll (Esconder/Mostrar)
-    ScrollTrigger.create({
-      start: "top top",
-      end: "max",
-      onUpdate: (self) => {
-        // self.direction: 1 = Baixo (Down), -1 = Cima (Up)
+  const navClasses = "pointer-events-auto glass flex items-center gap-1 p-1.5 rounded-full shadow-2xl shadow-black/50 border border-white/10 max-w-[90vw] md:max-w-fit overflow-x-auto no-scrollbar";
 
-        // --- SCROLL PARA BAIXO (Esconder) ---
-        if (self.direction === 1 && self.scroll() > 100) {
-          gsap.to(navRef.current, {
-            y: -150,
-            opacity: 1,
-            duration: 0.2,
-            ease: "power2.inOut"
-          });
-        }
-
-        // --- SCROLL PARA CIMA (Mostrar) ---
-        else if (self.direction === -1) {
-          gsap.to(navRef.current, {
-            y: 0,
-            opacity: 1,
-            duration: 0.2,
-            ease: "power2.out"
-          });
-        }
-      }
-    });
-
-  }, { scope: containerRef });
+  if (!isMounted) {
+    return null;
+  }
 
   return (
-    <div ref={containerRef} className="fixed top-6 left-0 right-0 z-50 flex justify-center px-4 pointer-events-none">
+    <div className={containerClasses}>
+      <nav ref={navRef} className={navClasses}>
+        {NAV_ITEMS.map((item) => {
+          const isActive = activeSection === item.id;
 
-      <nav
-        ref={navRef}
-        className="glass pointer-events-auto flex items-center gap-2 p-2 rounded-full transition-transform hover:scale-[1.02] duration-300"
-      >
+          const buttonBaseClass = "relative px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 ease-out whitespace-nowrap";
+          const buttonActiveClass = isActive
+            ? "text-white bg-white/10 shadow-inner font-bold scale-105"
+            : "text-zinc-400 hover:text-white hover:bg-white/5";
 
-        <button
-          onClick={() => scrollToSection("start")}
-          className="px-4 py-2 rounded-full text-sm font-bold text-white hover:bg-white/10 transition-colors flex items-center gap-2"
-        >
-          <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
-          AI Creator
-        </button>
-
-        <div className="w-[1px] h-4 bg-white/10 mx-1 hidden md:block" />
-
-        <ul className="hidden md:flex items-center gap-1">
-          <li>
+          return (
             <button
-              onClick={() => scrollToSection("persona")}
-              className="px-4 py-2 rounded-full text-xs font-medium text-zinc-400 hover:text-white hover:bg-white/5 transition-all"
+              key={item.id}
+              onClick={() => handleClick(item.id)}
+              className={`${buttonBaseClass} ${buttonActiveClass}`}
             >
-              Identidade
+              {item.label}
+              {isActive && (
+                <span className="absolute inset-0 rounded-full ring-1 ring-white/20 animate-pulse-slow pointer-events-none" />
+              )}
             </button>
-          </li>
-          <li>
-            <button
-              onClick={() => scrollToSection("knowledge")}
-              className="px-4 py-2 rounded-full text-xs font-medium text-zinc-400 hover:text-white hover:bg-white/5 transition-all"
-            >
-              Conhecimento
-            </button>
-          </li>
-        </ul>
-
-        <div className="w-[1px] h-4 bg-white/10 mx-1" />
-
-        <button
-          onClick={() => scrollToSection("generate")}
-          className="bg-white text-black px-5 py-2 rounded-full text-xs font-bold hover:bg-blue-50 hover:text-blue-600 transition-colors shadow-lg shadow-white/5"
-        >
-          Gerar ✨
-        </button>
-
+          );
+        })}
       </nav>
     </div>
   );

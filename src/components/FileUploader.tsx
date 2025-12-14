@@ -1,10 +1,10 @@
 "use client";
 
-import { useFormContext } from "@/context/FormContext"; // <--- Importar Contexto
+import { useFormContext } from "@/context/FormContext";
 import { useRef, useState } from "react";
 
 const FileUploader = () => {
-  // Em vez de useState local, usamos as funções do contexto
+  // Acesso ao contexto global para manipulação de arquivos
   const { data, addFile, removeFile } = useFormContext();
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -22,19 +22,19 @@ const FileUploader = () => {
     e.preventDefault();
     setIsDragging(false);
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-      Array.from(e.dataTransfer.files).forEach((file) => addFile(file)); // <--- Envia para o contexto
+      Array.from(e.dataTransfer.files).forEach((file) => addFile(file));
     }
   };
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
-      Array.from(e.target.files).forEach((file) => addFile(file)); // <--- Envia para o contexto
+      Array.from(e.target.files).forEach((file) => addFile(file));
     }
   };
 
   return (
     <div className="w-full max-w-3xl mx-auto px-6">
-      {/* Área de Drop */}
+      {/* Área de Upload (Drag and Drop) */}
       <div
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
@@ -61,7 +61,7 @@ const FileUploader = () => {
         </p>
       </div>
 
-      {/* Lista de Arquivos (Lê do Contexto global) */}
+      {/* Listagem de Arquivos Carregados */}
       {data.uploadedFiles.length > 0 && (
         <div className="mt-6 space-y-3">
           <h4 className="text-white text-sm font-semibold">Arquivos prontos para envio:</h4>
@@ -73,8 +73,9 @@ const FileUploader = () => {
                 <span className="text-zinc-600 text-xs">({(file.size / 1024).toFixed(1)} KB)</span>
               </div>
               <button
-                onClick={() => removeFile(index)} // <--- Remove do contexto
+                onClick={() => removeFile(index)}
                 className="text-zinc-500 hover:text-red-400 transition-colors px-2"
+                title="Remover arquivo"
               >
                 ✕
               </button>

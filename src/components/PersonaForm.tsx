@@ -1,6 +1,6 @@
 "use client";
 
-import { useFormContext } from "@/context/FormContext"; // <--- Importar o Hook
+import { useFormContext } from "@/context/FormContext";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -11,8 +11,9 @@ gsap.registerPlugin(ScrollTrigger);
 const PersonaForm = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
-  const { data, updateData } = useFormContext(); // <--- Usar o contexto
+  const { data, updateData } = useFormContext();
 
+  // Configuração da animação de entrada dos campos do formulário
   useGSAP(() => {
     gsap.fromTo(
       formRef.current?.children || [],
@@ -35,21 +36,21 @@ const PersonaForm = () => {
     <div ref={containerRef} className="w-full max-w-3xl mx-auto px-6">
       <form ref={formRef} className="space-y-8" onSubmit={(e) => e.preventDefault()}>
 
-        {/* Persona */}
+        {/* Campo: Persona */}
         <div className="group">
           <label className="block text-sm font-medium text-gray-400 mb-2 group-focus-within:text-blue-400 transition-colors">
-            Quem é a sua marca? (Persona)
+            Quem é sua marca? (Persona)
           </label>
           <textarea
-            value={data.persona} // Ligar ao valor do contexto
-            onChange={(e) => updateData("persona", e.target.value)} // Atualizar ao escrever
-            className="w-full bg-zinc-900/50 border border-zinc-800 rounded-2xl p-4 text-white placeholder-zinc-600 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all resize-none h-32"
+            value={data.persona}
+            onChange={(e) => updateData("persona", e.target.value)}
+            className="w-full bg-zinc-900/50 border border-zinc-800 rounded-2xl p-4 text-white placeholder-zinc-600 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all resize-none h-32 custom-scrollbar"
             placeholder="Ex: Uma marca de café artesanal jovem, sustentável e energética..."
           />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Público-Alvo */}
+          {/* Campo: Público-Alvo */}
           <div className="group">
             <label className="block text-sm font-medium text-gray-400 mb-2 group-focus-within:text-blue-400 transition-colors">
               Público-Alvo
@@ -63,7 +64,7 @@ const PersonaForm = () => {
             />
           </div>
 
-          {/* Tom de Voz */}
+          {/* Campo: Tom de Voz */}
           <div className="group">
             <label className="block text-sm font-medium text-gray-400 mb-2 group-focus-within:text-blue-400 transition-colors">
               Tom de Voz
@@ -78,7 +79,7 @@ const PersonaForm = () => {
           </div>
         </div>
 
-        {/* Identidade Visual */}
+        {/* Campo: Identidade Visual */}
         <div className="group">
           <label className="block text-sm font-medium text-gray-400 mb-2 group-focus-within:text-blue-400 transition-colors">
             Identidade Visual (Descrição)
